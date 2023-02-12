@@ -1,9 +1,5 @@
-import requests
-import os
-from dotenv import load_dotenv
 import csv
 import random
-import json
 
 
 with open('epi_r.csv', 'r') as csv_file:
