@@ -131,4 +131,4 @@ dmypy.json
 # custom
 *.csv
 *.json
-data.db
+data*.db

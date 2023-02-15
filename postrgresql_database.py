@@ -1,5 +1,5 @@
-import sqlite3
-from sqlite3 import Error
+import psycopg2
+from psycopg2 import OperationalError
 
 from read_csv import read_csv
 
@@ -7,8 +7,12 @@ from read_csv import read_csv
 def main():
     conn = None
     try:
-        conn = sqlite3.connect('data.db')
-    except Error as e:
+        conn = psycopg2.connect(
+            database="data_postgresql.db",
+            user="MaciekSobstel",
+            password="Xsoldier@1",
+            host="localhost")
+    except OperationalError as e:
         print(e)
     else:
         cursor = conn.cursor()
