@@ -1,31 +1,53 @@
-import csv
+import psycopg2
+from psycopg2 import OperationalError
 import random
-
-
-with open('epi_r.csv', 'r') as csv_file:
-    csv_reader = csv.reader(csv_file)
-    records = [row for row in csv_reader]
 
 
 menu = []
 
-for record in records:
-    dictionary = {}
-    dictionary[record[0]] = record[2]
-    menu.append(dictionary)
+
+def fetch_data():
+    try:
+        conn = psycopg2.connect(
+            database="foody",
+            user="postgres",
+            password="postgres",
+            host="localhost")
+    except OperationalError as e:
+        print(e)
+    else:
+        cur = conn.cursor()
+    cur.execute("SELECT name, calories, meal_type FROM dishes")
+    dishes = cur.fetchall()
+    cur.close()
+    conn.close()
+    return dishes
 
 
-meals = []
-cals = []
-calories = 0.0
-while calories < 2500.0:
-    random_meal = random.choice(menu)
-    for key, value in random_meal.items():
-        if value != '':
-            calories += float(value)
-            meals.append(key)
-            cals.append(value)
+# def main(calories):
+#     calories_start = 0.0
 
 
-print(meals)
-print(cals)
+# if __name__ == "__main__":
+#     main()
+
+# for record in records:
+#     dictionary = {}
+#     dictionary[record[0]] = record[2]
+#     menu.append(dictionary)
+
+
+# meals = []
+# cals = []
+# calories = 0.0
+# while calories < 2500.0:
+#     random_meal = random.choice(menu)
+#     for key, value in random_meal.items():
+#         if value != '':
+#             calories += float(value)
+#             meals.append(key)
+#             cals.append(value)
+
+
+# print(meals)
+# print(cals)

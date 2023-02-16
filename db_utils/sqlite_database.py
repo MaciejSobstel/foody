@@ -1,7 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 
-from read_csv import read_csv
+from db_utils.read_csv import read_csv
 
 
 def main():

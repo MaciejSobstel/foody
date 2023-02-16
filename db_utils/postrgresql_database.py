@@ -17,10 +17,11 @@ def main():
     else:
         cursor = conn.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS dishes (name TEXT, calories FLOAT, protein FLOAT, fat FLOAT, sodium FLOAT)")
+        cursor.execute("ALTER TABLE dishes ADD COLUMN meal_type TEXT")
         conn.commit()
         dishes = read_csv()
         for item in dishes:
-            cursor.execute(f"INSERT INTO dishes (name, calories, protein, fat, sodium) VALUES ('{item['title']}', '{item['calories']}', '{item['protein']}', '{item['fat']}', '{item['sodium']}')")
+            cursor.execute("UPDATE dishes SET meal_type = %s WHERE name = %s", (item['meal_type'], item['title']))
         conn.commit()
     finally:
         if conn:
