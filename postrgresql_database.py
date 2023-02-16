@@ -8,9 +8,9 @@ def main():
     conn = None
     try:
         conn = psycopg2.connect(
-            database="data_postgresql.db",
-            user="MaciekSobstel",
-            password="Xsoldier@1",
+            database="foody",
+            user="postgres",
+            password="postgres",
             host="localhost")
     except OperationalError as e:
         print(e)
