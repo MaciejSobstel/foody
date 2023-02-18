@@ -1,53 +1,28 @@
-import psycopg2
-from psycopg2 import OperationalError
 import random
 
+from menu import menu_median
 
-menu = []
 
-
-def fetch_data():
-    try:
-        conn = psycopg2.connect(
-            database="foody",
-            user="postgres",
-            password="postgres",
-            host="localhost")
-    except OperationalError as e:
-        print(e)
+def main(calories=float):
+    calories = float(calories)
+    if calories < 1000.0:
+        print('Select a number greater than 1000.')
     else:
-        cur = conn.cursor()
-    cur.execute("SELECT name, calories, meal_type FROM dishes")
-    dishes = cur.fetchall()
-    cur.close()
-    conn.close()
-    return dishes
+        menu_dinner = menu_median('dinner')
+        menu_breakfast = menu_median('breakfast')
+        menu_lunch = menu_median('lunch')
+        meals = []
+        while len(meals) < 3:
+            dinner = random.choice(menu_dinner)
+            breakfast = random.choice(menu_breakfast)
+            lunch = random.choice(menu_lunch)
+            chosen_meals = [breakfast, lunch, dinner]
+            if sum([meal[1] for meal in chosen_meals]) <= calories:
+                meals.extend(chosen_meals)
+                return meals
+            else:
+                main(calories)
 
 
-# def main(calories):
-#     calories_start = 0.0
-
-
-# if __name__ == "__main__":
-#     main()
-
-# for record in records:
-#     dictionary = {}
-#     dictionary[record[0]] = record[2]
-#     menu.append(dictionary)
-
-
-# meals = []
-# cals = []
-# calories = 0.0
-# while calories < 2500.0:
-#     random_meal = random.choice(menu)
-#     for key, value in random_meal.items():
-#         if value != '':
-#             calories += float(value)
-#             meals.append(key)
-#             cals.append(value)
-
-
-# print(meals)
-# print(cals)
+if __name__ == '__main__':
+    print(main(input("How many calories should your daily diet consist of?")))
