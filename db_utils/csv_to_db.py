@@ -1,25 +1,12 @@
 import argparse
-from dotenv import dotenv_values
 from pathlib import Path
-import psycopg2
-from psycopg2 import OperationalError
+
+from db_connector import db_connector
 
 from read_csv import read_csv
 
-config = dotenv_values() 
-
-
 def migrate(csv_path: Path):
-    try:
-        conn = psycopg2.connect(
-            database=config["DB_NAME"],
-            user=config["DB_USER"],
-            password=config["DB_PASSWORD"],
-            host=config["DB_HOST"],
-            port=config["DB_PORT"])
-    except OperationalError as e:
-        print(e)
-    else:
+    with db_connector() as conn:
         cursor = conn.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS dishes (name TEXT, calories FLOAT, protein FLOAT, fat FLOAT, sodium FLOAT, meal_type TEXT)")
         conn.commit()
@@ -27,9 +14,6 @@ def migrate(csv_path: Path):
         for item in dishes:
             cursor.execute(f"INSERT INTO dishes (name, calories, protein, fat, sodium, meal_type) VALUES ('{item['title']}', '{item['calories']}', '{item['protein']}', '{item['fat']}', '{item['sodium']}', '{item['meal_type']}')")
         conn.commit()
-    finally:
-        if conn:
-            conn.close()
 
 
 if __name__ == '__main__':

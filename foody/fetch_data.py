@@ -1,23 +1,12 @@
-import psycopg2
-from psycopg2 import OperationalError
 import math
 
+from db_utils.db_connector import db_connector
 
 def fetch_data():
-    try:
-        conn = psycopg2.connect(
-            database="foody",
-            user="postgres",
-            password="postgres",
-            host="localhost")
-    except OperationalError as e:
-        print(e)
-    else:
-        cur = conn.cursor()
-    cur.execute("SELECT * FROM dishes")
-    dishes = cur.fetchall()
-    cur.close()
-    conn.close()
+    with db_connector() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM dishes")
+        dishes = cursor.fetchall()
     return dishes
 
 
