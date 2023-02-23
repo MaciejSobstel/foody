@@ -1,8 +1,8 @@
 import pandas as pd
+from pathlib import Path
 
-
-def read_csv():
-    df = pd.read_csv('db_utils/epi_r.csv')
+def read_csv(input_path: Path):
+    df = pd.read_csv(input_path)
     df = df[['title', 'calories', 'protein', 'fat', 'sodium', 'breakfast', 'dinner', 'lunch']]
 
     def meal_type(breakfast: bool, lunch: bool, dinner: bool):
