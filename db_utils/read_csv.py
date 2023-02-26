@@ -1,6 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
+
 def read_csv(input_path: Path):
     df = pd.read_csv(input_path)
     df = df[['title', 'calories', 'protein', 'fat', 'sodium', 'breakfast', 'dinner', 'lunch']]

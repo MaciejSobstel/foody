@@ -5,6 +5,7 @@ from db_connector import db_connector
 
 from read_csv import read_csv
 
+
 def migrate(csv_path: Path):
     with db_connector() as conn:
         cursor = conn.cursor()

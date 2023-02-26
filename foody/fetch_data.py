@@ -2,6 +2,7 @@ import math
 
 from db_utils.db_connector import db_connector
 
+
 def fetch_data():
     with db_connector() as conn:
         cursor = conn.cursor()

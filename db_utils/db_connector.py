@@ -7,6 +7,7 @@ from dotenv import dotenv_values
 
 config = dotenv_values()
 
+
 @contextmanager
 def db_connector():
     try:
