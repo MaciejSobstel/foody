@@ -7,7 +7,9 @@ from fetch_data import select_from_db
 from conditions import cond, generate_total_value
 
 
-def fetch_and_filter_meals(meal_type: str, statistics_callable: Callable = median) -> List:
+def fetch_and_filter_meals(
+    meal_type: str, statistics_callable: Callable = median
+) -> List:
     all_meals = select_from_db(meal_type)
 
     # search for meals with 500 calories less or more than median
@@ -16,28 +18,37 @@ def fetch_and_filter_meals(meal_type: str, statistics_callable: Callable = media
     return list(filter(meal_filter, all_meals))
 
 
-def generate_menu(min_calories: float, max_calories: float, min_protein: float, max_protein: float, min_fat: float, max_fat: float, min_sodium: float, max_sodium: float, number_of_breakfasts: int = 1, number_of_lunches: int = 1, number_of_dinners: int = 1):
-    if max_calories < 1000.0:
-        raise ValueError('Select a number greater than 1000.')
-    if max_calories <= min_calories:
-        raise ValueError("Maxium calories can't be lower than minimum calories.")
-    if max_protein <= min_protein:
-        raise ValueError("Maxium protein can't be lower than minimum protein.")
-    if max_fat <= min_fat:
-        raise ValueError("Maxium fat can't be lower than minimum fat.")
-    if max_sodium <= min_sodium:
-        raise ValueError("Maxium sodium can't be lower than minimum sodium.")
-    if (max_calories - min_calories) < 100:
-        raise ValueError("Difference between minimum and maximum calories must be greater than 100.")
-    breakfasts = fetch_and_filter_meals('breakfast')
-    lunch = fetch_and_filter_meals('lunch')
-    dinner = fetch_and_filter_meals('dinner')
+def generate_menu(
+    min_calories: float,
+    max_calories: float,
+    min_protein: float,
+    max_protein: float,
+    min_fat: float,
+    max_fat: float,
+    min_sodium: float,
+    max_sodium: float,
+    number_of_breakfasts: int = 1,
+    number_of_lunches: int = 1,
+    number_of_dinners: int = 1,
+):
+    if max_calories <= 1000.0 or max_calories <= min_calories:
+        raise ValueError(
+            "Select a number greater than 1000 and make sure max calories is higher than min calories."
+        )
+    if max_protein <= min_protein or max_fat <= min_fat or max_sodium <= min_sodium:
+        raise ValueError(
+            "Make sure max value is higher than min value for protein, fat, and sodium."
+        )
+    if max_calories - min_calories < 100:
+        raise ValueError(
+            "Difference between minimum and maximum calories must be greater than 100."
+        )
+
+    breakfasts = fetch_and_filter_meals("breakfast")
+    lunch = fetch_and_filter_meals("lunch")
+    dinner = fetch_and_filter_meals("dinner")
     while True:
-        meals = [
-            random.choice(breakfasts),
-            random.choice(lunch),
-            random.choice(dinner)
-        ]
+        meals = [random.choice(breakfasts), random.choice(lunch), random.choice(dinner)]
         for i in range(number_of_breakfasts - 1):
             meals.append(random.choice(breakfasts))
         for i in range(number_of_lunches - 1):
@@ -52,25 +63,45 @@ def generate_menu(min_calories: float, max_calories: float, min_protein: float, 
             if cond(min_protein, max_protein, total_protein):
                 if cond(min_fat, max_fat, total_fat):
                     if cond(min_sodium, max_sodium, total_sodium):
-                        return meals, total_calories, total_protein, total_fat, total_sodium
+                        return (
+                            meals,
+                            total_calories,
+                            total_protein,
+                            total_fat,
+                            total_sodium,
+                        )
 
 
-def generate_message(min_calories: float, max_calories: float, min_protein: float, max_protein: float, min_fat: float, max_fat: float, min_sodium: float, max_sodium: float, number_of_breakfasts: int = 1, number_of_lunches: int = 1, number_of_dinners: int = 1):
-    menu, total_calories, total_protein, total_fat, total_sodium = generate_menu(min_calories, max_calories, min_protein, max_protein, min_fat, max_fat, min_sodium, max_sodium, number_of_breakfasts, number_of_lunches, number_of_dinners)
-    meal_names = []
-    for meal in menu:
-        meal_names.append(meal[0])
-    meal_types = []
-    for meal in menu:
-        meal_types.append(meal[5])
+def generate_message(
+    min_calories: float,
+    max_calories: float,
+    min_protein: float,
+    max_protein: float,
+    min_fat: float,
+    max_fat: float,
+    min_sodium: float,
+    max_sodium: float,
+    number_of_breakfasts: int = 1,
+    number_of_lunches: int = 1,
+    number_of_dinners: int = 1,
+):
+    menu, total_calories, total_protein, total_fat, total_sodium = generate_menu(
+        min_calories,
+        max_calories,
+        min_protein,
+        max_protein,
+        min_fat,
+        max_fat,
+        min_sodium,
+        max_sodium,
+        number_of_breakfasts,
+        number_of_lunches,
+        number_of_dinners,
+    )
+    meal_names = [meal[0] for meal in menu]
+    meal_types = [meal[5] for meal in menu]
     meals = [f"{a}({b})" for a, b in zip(meal_names, meal_types)]
-    first_line = "Menu: " + ", ".join(map(str, meals)) + '\n'
-    secord_line = "Total calories: " + str(total_calories) + '\n'
-    third_line = "Total protein: " + str(total_protein) + '\n'
-    fourth_line = "Total fat: " + str(total_fat) + '\n'
-    fifth_line = "Total sodium: " + str(total_sodium) + '\n'
-    text = first_line + secord_line + third_line + fourth_line + fifth_line
-    return text
+    return f"Menu: {', '.join(meals)}\nTotal calories: {total_calories}\nTotal protein: {total_protein}\nTotal fat: {total_fat}\nTotal sodium: {total_sodium}\n"
 
 
 # if __name__ == '__main__':
