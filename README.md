@@ -57,12 +57,45 @@ options:
 ```
 
 ```
-python3 foody/generate_menu.py 1000 2500 1 200 1 200 1 200 2 1 2
+python3 foody/generate_menu.py 1000 5500 1 200 1 200 1 4000 3 2 2
 
 
-Menu: Meyer Lemon and Vanilla Bean Marmalade (breakfast), Mushroom and Tomato Soup (lunch), Linguine and Zucchini with Bagna Cauda Sauce (dinner), Old-Fashioned Raspberry Jam (breakfast), Herbed Jasmine Rice (dinner)
-Total calories: 1817.0
-Total protein: 27.0
-Total fat: 33.0
-Total sodium: 175.0
+Menu:
+Rösti with Black Forest Ham and Chives (breakfast),
+Smoked Salmon Chowder (lunch),
+Green-Curry Chicken with Peas and Basil (dinner),
+Coffee-Glazed Doughnuts (breakfast),
+Dried Fruit Stewed with Brown Sugar and Vanilla (breakfast),
+Shrimp and Avocado Salad with Grapefruit Vinaigrette (lunch),
+Black Pepper Spice-Rubbed Beef Tenderloin (dinner)
+Total calories: 2800.0
+Total protein: 135.0
+Total fat: 168.0
+Total sodium: 2926.0
 ```
+
+## GUI Usage
+
+    Minimim calories slider - select minimum number of calories from 500 to 3000.
+
+    Maximum calories slider - select maximum number of calories from 1000 to 5000.
+
+    Minimum protein slider - select minimum number of protein from 1 to 200.
+
+    Maximum protein slider - select maximum number of protein from 1 to 200.
+
+    Minimum fat slider - select minimum number of fat from 1 to 200.
+
+    Maximum fat slider - select maximum number of fat from 1 to 200.
+
+    Minimum sodium slider - select minimum number of sodium from 1 to 3000.
+
+    Maximum sodium slider - select maximum number of sodium from 1000 to 5000.
+
+    Number of breakfasts spinbox - select number of breakfasts from 1 to 5 by using adjacent buttons to increment or decrement the spinbox value.
+
+    Number of lunches spinbox - select number of lunches from 1 to 5 by using adjacent buttons to increment or decrement the spinbox value.
+
+    Number of dinners spinbox - select number of dinners from 1 to 5 by using adjacent buttons to increment or decrement the spinbox value.
+
+    Generate my menu! button - returns the selected number of meals with selected macronutriens.

@@ -9,12 +9,14 @@ from generate_menu import generate_message
 class Foody():
     def __init__(self, window):
         self.window = window
-        window.geometry("800x800")
+        window.geometry("800x1200")
         window.title("Foody")
 
         icon = PhotoImage(file="/home/ms/Pobrane/foodylogo.png")
+        background_photo = PhotoImage(file="/home/ms/Pobrane/background.png")
+        bg_label = Label(window, image=background_photo)
+        bg_label.place(x=0, y=0, relwidth=1, relheight=1)
         window.iconphoto(True, icon)
-        window.config(background="#08610f")
 
         self.min_calories = Scale(window, from_=500, to=3000, resolution=1, orient=HORIZONTAL, label=" " * 20 + "Minimum calories", length=300, width=20)
         self.min_calories.set(1000)
@@ -25,7 +27,7 @@ class Foody():
         self.max_calories.pack()
 
         self.min_protein = Scale(window, from_=1, to=200, resolution=1, orient=HORIZONTAL, label=" " * 20 + "Minimum protein", length=300, width=20)
-        self.min_protein.set(50)
+        self.min_protein.set(20)
         self.min_protein.pack()
 
         self.max_protein = Scale(window, from_=1, to=200, resolution=1, orient=HORIZONTAL, label=" " * 20 + "Maximum protein", length=300, width=20)
@@ -33,7 +35,7 @@ class Foody():
         self.max_protein.pack()
 
         self.min_fat = Scale(window, from_=1, to=200, resolution=1, orient=HORIZONTAL, label=" " * 20 + "Minimum fat", length=300, width=20)
-        self.min_fat.set(50)
+        self.min_fat.set(20)
         self.min_fat.pack()
 
         self.max_fat = Scale(window, from_=1, to=200, resolution=1, orient=HORIZONTAL, label=" " * 20 + "Maximum fat", length=300, width=20)

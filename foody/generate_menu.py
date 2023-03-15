@@ -101,7 +101,8 @@ def generate_message(
     meal_names = [meal[0] for meal in menu]
     meal_types = [meal[5] for meal in menu]
     meals = [f"{a}({b})" for a, b in zip(meal_names, meal_types)]
-    return f"Menu: {', '.join(meals)}\nTotal calories: {total_calories}\nTotal protein: {total_protein}\nTotal fat: {total_fat}\nTotal sodium: {total_sodium}\n"
+    meals_text = ',\n'.join(meals)
+    return f"Menu:\n{meals_text}\nTotal calories: {total_calories}\nTotal protein: {total_protein}\nTotal fat: {total_fat}\nTotal sodium: {total_sodium}\n"
 
 
 # if __name__ == '__main__':
@@ -119,6 +120,6 @@ def generate_message(
 #     parser.add_argument('number_of_dinners', type=int, help='Number of dinners')
 #     args = parser.parse_args()
 
-#     generate_menu(args.min_calories, args.max_calories, args.min_protein, args.max_protein, args.min_fat, args.max_fat, args.min_sodium, args.max_sodium, args.number_of_breakfasts, args.number_of_lunches, args.number_of_dinners)
+#     print(generate_message(args.min_calories, args.max_calories, args.min_protein, args.max_protein, args.min_fat, args.max_fat, args.min_sodium, args.max_sodium, args.number_of_breakfasts, args.number_of_lunches, args.number_of_dinners))
 
-print(generate_message(1000, 2500, 1, 200, 1, 200, 1, 200, 2, 1, 2))
+# print(generate_message(1000, 5500, 1, 200, 1, 200, 1, 4000, 3, 2, 2))
