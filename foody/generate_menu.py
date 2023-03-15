@@ -35,7 +35,11 @@ def generate_menu(
         raise ValueError(
             "Select a number greater than 1000 and make sure max calories is higher than min calories."
         )
-    if max_protein <= min_protein or max_fat <= min_fat or max_sodium <= min_sodium:
+    if (
+        max_protein <= min_protein
+        or max_fat <= min_fat
+        or max_sodium <= min_sodium
+    ):
         raise ValueError(
             "Make sure max value is higher than min value for protein, fat, and sodium."
         )
@@ -48,7 +52,11 @@ def generate_menu(
     lunch = fetch_and_filter_meals("lunch")
     dinner = fetch_and_filter_meals("dinner")
     while True:
-        meals = [random.choice(breakfasts), random.choice(lunch), random.choice(dinner)]
+        meals = [
+            random.choice(breakfasts),
+            random.choice(lunch),
+            random.choice(dinner),
+        ]
         for i in range(number_of_breakfasts - 1):
             meals.append(random.choice(breakfasts))
         for i in range(number_of_lunches - 1):
@@ -85,7 +93,13 @@ def generate_message(
     number_of_lunches: int = 1,
     number_of_dinners: int = 1,
 ):
-    menu, total_calories, total_protein, total_fat, total_sodium = generate_menu(
+    (
+        menu,
+        total_calories,
+        total_protein,
+        total_fat,
+        total_sodium,
+    ) = generate_menu(
         min_calories,
         max_calories,
         min_protein,
@@ -101,9 +115,62 @@ def generate_message(
     meal_names = [meal[0] for meal in menu]
     meal_types = [meal[5] for meal in menu]
     meals = [f"{a}({b})" for a, b in zip(meal_names, meal_types)]
-    meals_text = ',\n'.join(meals)
+    meals_text = ",\n".join(meals)
     return f"Menu:\n{meals_text}\nTotal calories: {total_calories}\nTotal protein: {total_protein}\nTotal fat: {total_fat}\nTotal sodium: {total_sodium}\n"
 
+
+def generate_json(
+    min_calories: float,
+    max_calories: float,
+    min_protein: float,
+    max_protein: float,
+    min_fat: float,
+    max_fat: float,
+    min_sodium: float,
+    max_sodium: float,
+    number_of_breakfasts: int = 1,
+    number_of_lunches: int = 1,
+    number_of_dinners: int = 1,
+):
+    (
+        menu,
+        total_calories,
+        total_protein,
+        total_fat,
+        total_sodium,
+    ) = generate_menu(
+        min_calories,
+        max_calories,
+        min_protein,
+        max_protein,
+        min_fat,
+        max_fat,
+        min_sodium,
+        max_sodium,
+        number_of_breakfasts,
+        number_of_lunches,
+        number_of_dinners,
+    )
+
+    menu_list = []
+    for meal in menu:
+        menu_list.append({
+                "name": meal[0],
+                "calories": meal[1],
+                "protein": meal[2],
+                "fat": meal[3],
+                "sodium": meal[4],
+                "type": meal[5]
+            })
+    message_json = []
+    message_json.append(
+        {"meals": menu_list,
+         "total calories": total_calories,
+         "total protein": total_protein,
+         "total fat": total_fat,
+         "total sodium": total_sodium})
+
+    return message_json
 
 # if __name__ == '__main__':
 #     parser = argparse.ArgumentParser("Generate a menu for a day.")
@@ -122,4 +189,4 @@ def generate_message(
 
 #     print(generate_message(args.min_calories, args.max_calories, args.min_protein, args.max_protein, args.min_fat, args.max_fat, args.min_sodium, args.max_sodium, args.number_of_breakfasts, args.number_of_lunches, args.number_of_dinners))
 
-# print(generate_message(1000, 5500, 1, 200, 1, 200, 1, 4000, 3, 2, 2))
+# print(generate_json(1000, 5500, 1, 200, 1, 200, 1, 4000, 3, 2, 2))
