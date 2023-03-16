@@ -9,7 +9,7 @@ class Foody():
         window.geometry("800x1200")
         window.title("Foody")
 
-        icon = PhotoImage(file="/home/ms/Pobrane/foodylogo.png")
+        icon = PhotoImage(file="resources/foodylogo.png")
         # background_photo = PhotoImage(file="/home/ms/Pobrane/background.png")
         # bg_label = Label(window, image=background_photo)
         # bg_label.place(x=0, y=0, relwidth=1, relheight=1)
