@@ -1,9 +1,6 @@
 from tkinter import Tk, PhotoImage, Scale, HORIZONTAL, Button, Label, Spinbox, StringVar
-import sys
 
-sys.path.insert(0, '/home/ms/informatyka/Projekty/projekt_dieta/foody')
-
-from generate_menu import generate_message
+from foody.generate_menu import generate_message
 
 
 class Foody():
@@ -13,9 +10,9 @@ class Foody():
         window.title("Foody")
 
         icon = PhotoImage(file="/home/ms/Pobrane/foodylogo.png")
-        background_photo = PhotoImage(file="/home/ms/Pobrane/background.png")
-        bg_label = Label(window, image=background_photo)
-        bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+        # background_photo = PhotoImage(file="/home/ms/Pobrane/background.png")
+        # bg_label = Label(window, image=background_photo)
+        # bg_label.place(x=0, y=0, relwidth=1, relheight=1)
         window.iconphoto(True, icon)
 
         self.min_calories = Scale(window, from_=500, to=3000, resolution=1, orient=HORIZONTAL, label=" " * 20 + "Minimum calories", length=300, width=20)

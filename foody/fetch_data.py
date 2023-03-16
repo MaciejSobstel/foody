@@ -1,10 +1,6 @@
 import math
-import sys
 
-sys.path.insert(0, '/home/ms/informatyka/Projekty/projekt_dieta/db_utils')
-
-
-from db_connector import db_connector
+from db_utils.db_connector import db_connector
 
 
 def fetch_data():

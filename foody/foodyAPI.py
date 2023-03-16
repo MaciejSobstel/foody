@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
-from generate_menu import generate_json
+
+from foody.generate_menu import generate_json
 
 
 app = Flask(__name__)

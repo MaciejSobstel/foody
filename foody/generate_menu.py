@@ -3,8 +3,8 @@ import random
 from statistics import mean, median
 from typing import Callable, List
 
-from fetch_data import select_from_db
-from conditions import cond, generate_total_value
+from foody.fetch_data import select_from_db
+from foody.conditions import cond, generate_total_value
 
 
 def fetch_and_filter_meals(
