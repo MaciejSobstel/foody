@@ -7,6 +7,30 @@ from foody.fetch_data import select_from_db
 from foody.conditions import cond, generate_total_value
 
 
+class DiffLessThan100CalsError(ValueError):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
+class MinGrThanMaxProteinError(ValueError):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
+class MinGrThanMaxFatError(ValueError):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
+class MinGrThanMaxSodError(ValueError):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
 def fetch_and_filter_meals(
     meal_type: str, statistics_callable: Callable = median
 ) -> List:
@@ -31,21 +55,21 @@ def generate_menu(
     number_of_lunches: int = 1,
     number_of_dinners: int = 1,
 ):
-    if max_calories <= 1000.0 or max_calories <= min_calories:
-        raise ValueError(
-            "Select a number greater than 1000 and make sure max calories is higher than min calories."
+    if max_protein <= min_protein:
+        raise MinGrThanMaxProteinError(
+            "Make sure maximum protein is greater than minimum protein."
         )
-    if (
-        max_protein <= min_protein
-        or max_fat <= min_fat
-        or max_sodium <= min_sodium
-    ):
-        raise ValueError(
-            "Make sure max value is higher than min value for protein, fat, and sodium."
+    if max_fat <= min_fat:
+        raise MinGrThanMaxFatError(
+            "Make sure maximum fat is greater than minimum fat."
+        )
+    if max_sodium <= min_sodium:
+        raise MinGrThanMaxSodError(
+            "Make sure maximum sodium is greater than minimum sodium."
         )
     if max_calories - min_calories < 100:
-        raise ValueError(
-            "Difference between minimum and maximum calories must be greater than 100."
+        raise DiffLessThan100CalsError(
+            "Make sure difference bewteen maximum calories and minimum calories is greater than 100\nand\nmaximum calories is greater than minimum calories."
         )
 
     breakfasts = fetch_and_filter_meals("breakfast")
@@ -154,39 +178,75 @@ def generate_json(
 
     menu_list = []
     for meal in menu:
-        menu_list.append({
+        menu_list.append(
+            {
                 "name": meal[0],
                 "calories": meal[1],
                 "protein": meal[2],
                 "fat": meal[3],
                 "sodium": meal[4],
-                "type": meal[5]
-            })
+                "type": meal[5],
+            }
+        )
     message_json = []
     message_json.append(
-        {"meals": menu_list,
-         "total calories": total_calories,
-         "total protein": total_protein,
-         "total fat": total_fat,
-         "total sodium": total_sodium})
+        {
+            "meals": menu_list,
+            "total calories": total_calories,
+            "total protein": total_protein,
+            "total fat": total_fat,
+            "total sodium": total_sodium,
+        }
+    )
 
     return message_json
 
-# if __name__ == '__main__':
-#     parser = argparse.ArgumentParser("Generate a menu for a day.")
-#     parser.add_argument('min_calories', type=float, help='Minimum number of calories.')
-#     parser.add_argument('max_calories', type=float, help='Maximum number of calories.')
-#     parser.add_argument('min_protein', type=float, help='Minimum number of protein.')
-#     parser.add_argument('max_protein', type=float, help='Maximum number of protein.')
-#     parser.add_argument('min_fat', type=float, help='Minimum number of fat.')
-#     parser.add_argument('max_fat', type=float, help='Maximum number of fat.')
-#     parser.add_argument('min_sodium', type=float, help='Minimum number of sodium.')
-#     parser.add_argument('max_sodium', type=float, help='Maximum number of sodium.')
-#     parser.add_argument('number_of_breakfasts', type=int, help='Number of breakfasts')
-#     parser.add_argument('number_of_lunches', type=int, help='Number of lunches')
-#     parser.add_argument('number_of_dinners', type=int, help='Number of dinners')
-#     args = parser.parse_args()
 
-#     print(generate_message(args.min_calories, args.max_calories, args.min_protein, args.max_protein, args.min_fat, args.max_fat, args.min_sodium, args.max_sodium, args.number_of_breakfasts, args.number_of_lunches, args.number_of_dinners))
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser("Generate a menu for a day.")
+    parser.add_argument(
+        "min_calories", type=float, help="Minimum number of calories."
+    )
+    parser.add_argument(
+        "max_calories", type=float, help="Maximum number of calories."
+    )
+    parser.add_argument(
+        "min_protein", type=float, help="Minimum number of protein."
+    )
+    parser.add_argument(
+        "max_protein", type=float, help="Maximum number of protein."
+    )
+    parser.add_argument("min_fat", type=float, help="Minimum number of fat.")
+    parser.add_argument("max_fat", type=float, help="Maximum number of fat.")
+    parser.add_argument(
+        "min_sodium", type=float, help="Minimum number of sodium."
+    )
+    parser.add_argument(
+        "max_sodium", type=float, help="Maximum number of sodium."
+    )
+    parser.add_argument(
+        "number_of_breakfasts", type=int, help="Number of breakfasts"
+    )
+    parser.add_argument(
+        "number_of_lunches", type=int, help="Number of lunches"
+    )
+    parser.add_argument(
+        "number_of_dinners", type=int, help="Number of dinners"
+    )
+    args = parser.parse_args()
 
-# print(generate_json(1000, 5500, 1, 200, 1, 200, 1, 4000, 3, 2, 2))
+    print(
+        generate_message(
+            args.min_calories,
+            args.max_calories,
+            args.min_protein,
+            args.max_protein,
+            args.min_fat,
+            args.max_fat,
+            args.min_sodium,
+            args.max_sodium,
+            args.number_of_breakfasts,
+            args.number_of_lunches,
+            args.number_of_dinners,
+        )
+    )
